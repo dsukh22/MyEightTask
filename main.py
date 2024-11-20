@@ -13,21 +13,35 @@ class All_About_Encryption:
         self.key: str = "LIME"
         self.encrypted_text: str = ""
 
-    def set_text_to_encrypt(self, new_text_to_encrypt: str): pass
+    def set_text_to_encrypt(self, new_text_to_encrypt: str):
+        if new_text_to_encrypt == "":
+            return "Вы не ввели данные для строки!"
+        if not bool(re.match(self.eng_pattern, new_text_to_encrypt)):
+            return "Строка введена некорректно!"
+        self.text_to_encrypt = new_text_to_encrypt
 
-    def set_shift(self, new_shift_value): pass
+    def set_shift(self, new_shift_value):
+        if not new_shift_value:
+            return "Не введена величина сдвига!"
+        try:
+            new_shift_value = int(new_shift_value)
+        except:
+            return "Нужна цифровая величина сдвига!"
+        self.shift_value = new_shift_value
 
-    def set_encrypted_text(self, new_encrypted_text: str): pass
+    def set_encrypted_text(self, new_encrypted_text: str): self.encrypted_text = new_encrypted_text
 
-    def change_text_to_encrypt(self, new_text: str): pass
+    def change_text_to_encrypt(self, new_text: str):
+        self.text_to_encrypt = new_text
 
-    def change_shift_value(self, new_value: int): pass
+    def change_shift_value(self, new_value: int):
+        self.shift_value = new_value
 
-    def show_text_to_encrypt(self): pass
-    def show_shift_value(self): pass
-    def show_key(self): pass
-    def show_regex(self): pass
-    def show_encrypted_text(self): pass
+    def show_text_to_encrypt(self): return self.text_to_encrypt
+    def show_shift_value(self): return self.shift_value
+    def show_key(self): return self.key
+    def show_regex(self): return self.eng_pattern
+    def show_encrypted_text(self): return self.encrypted_text
 
 
 class User_Choice:
@@ -35,11 +49,11 @@ class User_Choice:
         self.users_choice: str = ""
         self.users_choice_of_text: str = ""
 
-    def change_choice(self, new_choice: str): pass
-    def change_text_gen_choice(self, new_choice_: str): pass
+    def change_choice(self, new_choice: str): self.users_choice = new_choice
+    def change_text_gen_choice(self, new_choice_: str): self.users_choice_of_text = new_choice_
 
-    def get_choice(self): pass
-    def get_text_gen_choice(self): pass
+    def get_choice(self): return self.users_choice
+    def get_text_gen_choice(self): return self.users_choice_of_text
 
 
 class Main_Processes:
@@ -49,11 +63,14 @@ class Main_Processes:
 
     @staticmethod
     def Generate_random_string() -> str:
-        pass
+        letters = string.ascii_letters
+        random_string = ''.join(random.choice(letters) for _ in range(6))
+        return random_string
 
     @staticmethod
     def Generate_random_shift() -> int:
-        pass
+        shift = random.randint(0, 10)
+        return shift
 
     @staticmethod
     def Quitting():
@@ -136,3 +153,20 @@ class Main_Processes:
         input(f"Зашифрованная строка: {checking_results}\n"
               f"Ключ: {key}\n"
               f"Нажмите любую клавишу, чтобы продолжить...")
+
+
+if __name__ == "__main__":
+    Body = Main_Processes()
+    while True:
+        os.system("cls")
+        Body.Print_Menu()
+        user_choice = Body.choice_.get_choice()
+        match user_choice:
+            case "1":
+                Body.String_Work()
+            case "2":
+                Body.Encryption_Process()
+            case "3":
+                Body.Printing_A_Result()
+            case "4":
+                Body.Quitting()
